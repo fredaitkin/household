@@ -82,10 +82,10 @@ FLUSH PRIVILEGES;
 Run it as a privileged user (e.g., `root`):
 
 ```bash
-mysql -u root -p < db/migrations/002_create_admin_user.sql
+mysql -u root -p < db/migrations/001_create_admin_user.sql
 ```
 
-### 2. Create the `grocery_types` table
+### 3. Create the `grocery_types` table
 
 [db/migrations/002_create_grocery_types.sql](db/migrations/001_create_grocery_types.sql) creates a lookup table of grocery categories:
 
@@ -107,7 +107,7 @@ CREATE TABLE IF NOT EXISTS grocery_types (
 Run it against the `Household` database:
 
 ```bash
-mysql -u <user> -p Household < db/migrations/001_create_grocery_types.sql
+mysql -u <user> -p Household < db/migrations/003_create_grocery_types.sql
 ```
 
 ### Run everything
