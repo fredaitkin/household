@@ -107,7 +107,42 @@ CREATE TABLE IF NOT EXISTS grocery_types (
 Run it against the `Household` database:
 
 ```bash
-mysql -u <user> -p Household < db/migrations/003_create_grocery_types.sql
+mysql -u <user> -p Household < db/migrations/002_create_grocery_types.sql
+```
+
+### 4. Create the `groceries` table
+
+[db/migrations/003_create_groceries.sql](db/migrations/003_create_groceries.sql) creates the groceries spending table, linked to `grocery_types` by foreign key:
+
+```sql
+CREATE TABLE IF NOT EXISTS groceries (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `date` DATE NOT NULL,
+  `Type` INT UNSIGNED NOT NULL,
+  `Cost` DECIMAL(10,2) NOT NULL,
+  PRIMARY KEY (id),
+  KEY idx_groceries_type (`Type`),
+  CONSTRAINT fk_groceries_type
+    FOREIGN KEY (`Type`)
+    REFERENCES grocery_types (id)
+    ON UPDATE CASCADE
+    ON DELETE RESTRICT
+) ENGINE=InnoDB
+  DEFAULT CHARSET=utf8mb4
+  COLLATE=utf8mb4_unicode_ci;
+```
+
+| Column | Type | Notes |
+| ------ | ---- | ----- |
+| `id` | INT UNSIGNED | Primary key, auto-increment |
+| `date` | DATE | Purchase date |
+| `Type` | INT UNSIGNED | Foreign key → `grocery_types.id` |
+| `Cost` | DECIMAL(10,2) | Purchase cost |
+
+Run it against the `Household` database (after `grocery_types` exists):
+
+```bash
+mysql -u <user> -p Household < db/migrations/003_create_groceries.sql
 ```
 
 ### Run everything
@@ -118,6 +153,7 @@ Run the scripts in order:
 mysql -u root -p < db/migrations/000_create_database.sql
 mysql -u root -p < db/migrations/001_create_admin_user.sql
 mysql -u root -p Household < db/migrations/002_create_grocery_types.sql
+mysql -u root -p Household < db/migrations/003_create_groceries.sql
 ```
 
 ## How it works
