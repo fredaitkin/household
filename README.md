@@ -20,7 +20,19 @@ Install dependencies:
 npm install
 ```
 
-Start the dev server:
+Configure the database connection (copy the example, then edit `server/.env` with your MySQL credentials):
+
+```bash
+cp server/.env.example server/.env
+```
+
+Start the API server (in one terminal):
+
+```bash
+npm run server
+```
+
+Start the dev server (in another terminal):
 
 ```bash
 npm run dev
