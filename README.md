@@ -157,6 +157,58 @@ Run it against the `Household` database (after `grocery_types` exists):
 mysql -u <user> -p Household < db/migrations/003_create_groceries.sql
 ```
 
+### 5. Create the `restaurants` table
+
+[db/migrations/004_create_restaurants.sql](db/migrations/004_create_restaurants.sql) creates the restaurants spending table:
+
+```sql
+CREATE TABLE IF NOT EXISTS restaurants (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `date` DATE NOT NULL,
+  `Cost` DECIMAL(10,2) NOT NULL,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB
+  DEFAULT CHARSET=utf8mb4
+  COLLATE=utf8mb4_unicode_ci;
+```
+
+| Column | Type | Notes |
+| ------ | ---- | ----- |
+| `id` | INT UNSIGNED | Primary key, auto-increment |
+| `date` | DATE | Visit date |
+| `Cost` | DECIMAL(10,2) | Meal cost |
+
+```bash
+mysql -u <user> -p Household < db/migrations/004_create_restaurants.sql
+```
+
+### 6. Create the `entertainment` table
+
+[db/migrations/005_create_entertainment.sql](db/migrations/005_create_entertainment.sql) creates the entertainment spending table:
+
+```sql
+CREATE TABLE IF NOT EXISTS entertainment (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `date` DATE NOT NULL,
+  `Type` VARCHAR(100) NOT NULL,
+  `Cost` DECIMAL(10,2) NOT NULL,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB
+  DEFAULT CHARSET=utf8mb4
+  COLLATE=utf8mb4_unicode_ci;
+```
+
+| Column | Type | Notes |
+| ------ | ---- | ----- |
+| `id` | INT UNSIGNED | Primary key, auto-increment |
+| `date` | DATE | Activity date |
+| `Type` | VARCHAR(100) | Activity type (e.g. Movie) |
+| `Cost` | DECIMAL(10,2) | Activity cost |
+
+```bash
+mysql -u <user> -p Household < db/migrations/005_create_entertainment.sql
+```
+
 ### Run everything
 
 Run the scripts in order:
@@ -166,6 +218,8 @@ mysql -u root -p < db/migrations/000_create_database.sql
 mysql -u root -p < db/migrations/001_create_admin_user.sql
 mysql -u root -p Household < db/migrations/002_create_grocery_types.sql
 mysql -u root -p Household < db/migrations/003_create_groceries.sql
+mysql -u root -p Household < db/migrations/004_create_restaurants.sql
+mysql -u root -p Household < db/migrations/005_create_entertainment.sql
 ```
 
 ## How it works
