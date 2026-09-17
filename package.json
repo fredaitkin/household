@@ -8,7 +8,8 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "server": "node server/index.js"
+    "server": "node server/index.js",
+    "db:dump": "node server/utils/dump-database.js"
   },
   "dependencies": {
     "dotenv": "^16.4.5",
