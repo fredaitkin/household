@@ -11,6 +11,8 @@ export default function App() {
   const [activeTab, setActiveTab] = useState(TABS[0].id)
   const [settingsOpen, setSettingsOpen] = useState(false)
   const [addGroceryOpen, setAddGroceryOpen] = useState(false)
+  const [addRestaurantOpen, setAddRestaurantOpen] = useState(false)
+  const [addEntertainmentOpen, setAddEntertainmentOpen] = useState(false)
 
   const [groceryTypes, setGroceryTypes] = useState([])
   const [groceries, setGroceries] = useState([])
@@ -252,60 +254,7 @@ export default function App() {
             </>
           )}
 
-          <form className="settings-form" onSubmit={addRestaurant}>
-            <label>Add restaurant</label>
-            <div className="settings-row">
-              <input
-                type="date"
-                value={rDate}
-                onChange={(e) => setRDate(e.target.value)}
-                aria-label="Date"
-              />
-              <input
-                type="number"
-                step="0.01"
-                min="0"
-                value={rCost}
-                onChange={(e) => setRCost(e.target.value)}
-                placeholder="Cost"
-                aria-label="Cost"
-              />
-              <button type="submit" className="btn">
-                Add
-              </button>
-            </div>
-          </form>
 
-          <form className="settings-form" onSubmit={addEntertainment}>
-            <label>Add entertainment</label>
-            <div className="settings-row">
-              <input
-                type="date"
-                value={eDate}
-                onChange={(e) => setEDate(e.target.value)}
-                aria-label="Date"
-              />
-              <input
-                type="text"
-                value={eType}
-                onChange={(e) => setEType(e.target.value)}
-                placeholder="Type (e.g. Movie)"
-                aria-label="Type"
-              />
-              <input
-                type="number"
-                step="0.01"
-                min="0"
-                value={eCost}
-                onChange={(e) => setECost(e.target.value)}
-                placeholder="Cost"
-                aria-label="Cost"
-              />
-              <button type="submit" className="btn">
-                Add
-              </button>
-            </div>
-          </form>
         </section>
       )}
 
@@ -387,6 +336,89 @@ export default function App() {
                   min="0"
                   value={gCost}
                   onChange={(e) => setGCost(e.target.value)}
+                  placeholder="Cost"
+                  aria-label="Cost"
+                />
+                <button type="submit" className="btn">
+                  Add
+                </button>
+              </div>
+            </form>
+          )}
+        </div>
+      )}
+      {activeTab === 'restaurants' && (
+        <div className="add-restaurant">
+          <button
+            type="button"
+            className="add-restaurant-link"
+            aria-expanded={addRestaurantOpen}
+            onClick={() => setAddRestaurantOpen((open) => !open)}
+          >
+            + Add restaurant
+          </button>
+
+          {addRestaurantOpen && (
+            <form className="settings-form" onSubmit={addRestaurant}>
+              <label>Add restaurant</label>
+              <div className="settings-row">
+                <input
+                  type="date"
+                  value={rDate}
+                  onChange={(e) => setRDate(e.target.value)}
+                  aria-label="Date"
+                />
+                <input
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  value={rCost}
+                  onChange={(e) => setRCost(e.target.value)}
+                  placeholder="Cost"
+                  aria-label="Cost"
+                />
+                <button type="submit" className="btn">
+                  Add
+                </button>
+              </div>
+            </form>
+          )}
+        </div>
+      )}
+      {activeTab === 'entertainment' && (
+        <div className="add-entertainment">
+          <button
+            type="button"
+            className="add-entertainment-link"
+            aria-expanded={addEntertainmentOpen}
+            onClick={() => setAddEntertainmentOpen((open) => !open)}
+          >
+            + Add entertainment
+          </button>
+
+          {addEntertainmentOpen && (
+            <form className="settings-form" onSubmit={addEntertainment}>
+              <label>Add entertainment</label>
+              <div className="settings-row">
+                <input
+                  type="date"
+                  value={eDate}
+                  onChange={(e) => setEDate(e.target.value)}
+                  aria-label="Date"
+                />
+                <input
+                  type="text"
+                  value={eType}
+                  onChange={(e) => setEType(e.target.value)}
+                  placeholder="Type (e.g. Movie)"
+                  aria-label="Type"
+                />
+                <input
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  value={eCost}
+                  onChange={(e) => setECost(e.target.value)}
                   placeholder="Cost"
                   aria-label="Cost"
                 />

@@ -134,6 +134,62 @@ td.empty {
   margin-top: 12px;
 }
 
+/* Add restaurant (under Restaurants table) */
+.add-restaurant {
+  margin-top: 12px;
+}
+
+.add-restaurant-link {
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: var(--accent);
+  font-size: 14px;
+  font-weight: 600;
+  padding: 0;
+  cursor: pointer;
+}
+
+.add-restaurant-link:hover {
+  text-decoration: underline;
+}
+
+.add-restaurant .settings-form {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px;
+  margin-top: 12px;
+}
+
+/* Add entertainment (under Entertainment table) */
+.add-entertainment {
+  margin-top: 12px;
+}
+
+.add-entertainment-link {
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: var(--accent);
+  font-size: 14px;
+  font-weight: 600;
+  padding: 0;
+  cursor: pointer;
+}
+
+.add-entertainment-link:hover {
+  text-decoration: underline;
+}
+
+.add-entertainment .settings-form {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px;
+  margin-top: 12px;
+}
+
 /* Settings */
 .topbar {
   display: flex;

@@ -11,6 +11,31 @@ A one-page React app that displays a tabbed table for tracking household spendin
 - Active tab highlighting and hoverable rows.
 - Empty-state message ("No data yet") when a tab has no rows.
 - Responsive table container (horizontal scroll on small screens).
+- Per-tab **+ Add …** links under each table for adding rows.
+- A **⚙ Settings** panel for managing grocery types.
+
+## Using the app
+
+### Settings (grocery types)
+
+Click **⚙ Settings** in the top-right corner of the page to toggle the Settings panel. Settings is where you manage the grocery categories used by the Groceries tab:
+
+- **Add a grocery type**: enter a name in the *Grocery type* field (e.g. "Produce") and click **Add type**. The type is saved via `POST /api/grocery-types` and appears in the list below.
+- **Delete a grocery type**: click the **×** on any type chip in the *Grocery types* list. This calls `DELETE /api/grocery-types/:id`. Note: the database enforces a foreign-key constraint (`ON DELETE RESTRICT`), so a type that is used by any grocery row cannot be deleted.
+
+### Adding groceries, restaurants, and entertainment
+
+Each tab has its own **+ Add …** link directly underneath the table, so you add rows where you see them:
+
+1. Switch to the tab you want (**Groceries**, **Restaurants**, or **Entertainment**).
+2. Click the **+ Add grocery** / **+ Add restaurant** / **+ Add entertainment** link below the table. Clicking the link again collapses the form.
+3. Fill in the fields and click **Add**:
+   - **Grocery** — Date, Type (dropdown of the grocery types created in Settings), and Cost. Submits to `POST /api/groceries`.
+   - **Restaurant** — Date and Cost. Submits to `POST /api/restaurants`.
+   - **Entertainment** — Date, Type (free text, e.g. "Movie"), and Cost. Submits to `POST /api/entertainment`.
+4. On success the form clears, the table refreshes, and the new row appears. If a request fails, an error banner is shown at the top of the page.
+
+> Tip: grocery types must exist before you can add a grocery, so create them first via **⚙ Settings**.
 
 ## Getting started
 
@@ -60,7 +85,7 @@ npm run preview
 
 ## Database
 
-Standalone MySQL scripts live in [db/migrations](db/migrations). The app is a static front end and does not connect to the database — these scripts are for your own data store.
+Standalone MySQL scripts live in [db/migrations](db/migrations). The front end talks to the database through the Express API in [server/index.js](server/index.js) — these scripts create the schema that the API reads from and writes to.
 
 ### 1. Create the database
 
