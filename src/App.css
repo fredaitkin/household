@@ -106,6 +106,34 @@ td.empty {
   font-style: italic;
 }
 
+/* Add grocery (under Groceries table) */
+.add-grocery {
+  margin-top: 12px;
+}
+
+.add-grocery-link {
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: var(--accent);
+  font-size: 14px;
+  font-weight: 600;
+  padding: 0;
+  cursor: pointer;
+}
+
+.add-grocery-link:hover {
+  text-decoration: underline;
+}
+
+.add-grocery .settings-form {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px;
+  margin-top: 12px;
+}
+
 /* Settings */
 .topbar {
   display: flex;

@@ -10,6 +10,7 @@ const TABS = [
 export default function App() {
   const [activeTab, setActiveTab] = useState(TABS[0].id)
   const [settingsOpen, setSettingsOpen] = useState(false)
+  const [addGroceryOpen, setAddGroceryOpen] = useState(false)
 
   const [groceryTypes, setGroceryTypes] = useState([])
   const [groceries, setGroceries] = useState([])
@@ -251,38 +252,6 @@ export default function App() {
             </>
           )}
 
-          <form className="settings-form" onSubmit={addGrocery}>
-            <label>Add grocery</label>
-            <div className="settings-row">
-              <input
-                type="date"
-                value={gDate}
-                onChange={(e) => setGDate(e.target.value)}
-                aria-label="Date"
-              />
-              <select value={gTypeId} onChange={(e) => setGTypeId(e.target.value)} aria-label="Type">
-                <option value="">Select type…</option>
-                {groceryTypes.map((t) => (
-                  <option key={t.id} value={t.id}>
-                    {t.type}
-                  </option>
-                ))}
-              </select>
-              <input
-                type="number"
-                step="0.01"
-                min="0"
-                value={gCost}
-                onChange={(e) => setGCost(e.target.value)}
-                placeholder="Cost"
-                aria-label="Cost"
-              />
-              <button type="submit" className="btn">
-                Add
-              </button>
-            </div>
-          </form>
-
           <form className="settings-form" onSubmit={addRestaurant}>
             <label>Add restaurant</label>
             <div className="settings-row">
@@ -382,6 +351,53 @@ export default function App() {
           </tbody>
         </table>
       </div>
+
+      {activeTab === 'groceries' && (
+        <div className="add-grocery">
+          <button
+            type="button"
+            className="add-grocery-link"
+            aria-expanded={addGroceryOpen}
+            onClick={() => setAddGroceryOpen((open) => !open)}
+          >
+            + Add grocery
+          </button>
+
+          {addGroceryOpen && (
+            <form className="settings-form" onSubmit={addGrocery}>
+              <label>Add grocery</label>
+              <div className="settings-row">
+                <input
+                  type="date"
+                  value={gDate}
+                  onChange={(e) => setGDate(e.target.value)}
+                  aria-label="Date"
+                />
+                <select value={gTypeId} onChange={(e) => setGTypeId(e.target.value)} aria-label="Type">
+                  <option value="">Select type…</option>
+                  {groceryTypes.map((t) => (
+                    <option key={t.id} value={t.id}>
+                      {t.type}
+                    </option>
+                  ))}
+                </select>
+                <input
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  value={gCost}
+                  onChange={(e) => setGCost(e.target.value)}
+                  placeholder="Cost"
+                  aria-label="Cost"
+                />
+                <button type="submit" className="btn">
+                  Add
+                </button>
+              </div>
+            </form>
+          )}
+        </div>
+      )}
     </div>
   )
 }
