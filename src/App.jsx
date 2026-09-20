@@ -187,14 +187,28 @@ export default function App() {
   }
 
   // Build the rows to display for the current tab.
-  const columns = tab.columns
+  const isGroceries = tab.id === 'groceries'
+  const columns = isGroceries ? [...tab.columns, ''] : tab.columns
   let rows = []
-  if (tab.id === 'groceries') {
-    rows = groceries.map((g) => [formatDate(g.date), g.type ?? `#${g.typeId}`, formatCost(g.cost)])
+  if (isGroceries) {
+    rows = groceries.map((g) => ({
+      key: g.id,
+      cells: [formatDate(g.date), g.type ?? `#${g.typeId}`, formatCost(g.cost)],
+    }))
   } else if (tab.id === 'restaurants') {
-    rows = restaurants.map((r) => [formatDate(r.date), formatCost(r.cost)])
+    rows = restaurants.map((r) => ({ key: r.id, cells: [formatDate(r.date), formatCost(r.cost)] }))
   } else if (tab.id === 'entertainment') {
-    rows = entertainment.map((x) => [formatDate(x.date), x.type, formatCost(x.cost)])
+    rows = entertainment.map((x) => ({ key: x.id, cells: [formatDate(x.date), x.type, formatCost(x.cost)] }))
+  }
+
+  async function deleteGrocery(id) {
+    setError('')
+    try {
+      await api(`/api/groceries/${id}`, { method: 'DELETE' })
+      await loadGroceries()
+    } catch (err) {
+      setError(`Could not delete grocery: ${err.message}`)
+    }
   }
 
   return (
@@ -254,7 +268,6 @@ export default function App() {
             </>
           )}
 
-
         </section>
       )}
 
@@ -289,11 +302,24 @@ export default function App() {
                 </td>
               </tr>
             ) : (
-              rows.map((row, i) => (
-                <tr key={i}>
-                  {row.map((cell, j) => (
+              rows.map((row) => (
+                <tr key={row.key}>
+                  {row.cells.map((cell, j) => (
                     <td key={j}>{cell}</td>
                   ))}
+                  {isGroceries && (
+                    <td className="row-actions">
+                      <button
+                        type="button"
+                        className="row-delete"
+                        aria-label="Delete grocery row"
+                        title="Delete row"
+                        onClick={() => deleteGrocery(row.key)}
+                      >
+                        ×
+                      </button>
+                    </td>
+                  )}
                 </tr>
               ))
             )}

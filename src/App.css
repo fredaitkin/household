@@ -99,6 +99,30 @@ tbody tr:hover {
   background: #f8fafc;
 }
 
+/* Row actions (delete) */
+.row-actions {
+  width: 1%;
+  white-space: nowrap;
+  text-align: right;
+}
+
+.row-delete {
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 6px;
+}
+
+.row-delete:hover {
+  color: #c0392b;
+  background: #fdecea;
+}
+
 td.empty {
   text-align: center;
   color: var(--muted);

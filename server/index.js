@@ -107,6 +107,24 @@ app.post('/api/groceries', async (req, res) => {
   }
 })
 
+// Delete a grocery
+app.delete('/api/groceries/:id', async (req, res) => {
+  const id = Number(req.params.id)
+  if (!Number.isInteger(id) || id <= 0) {
+    return res.status(400).json({ error: 'valid id is required' })
+  }
+  try {
+    const [result] = await pool.query('DELETE FROM groceries WHERE id = ?', [id])
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'grocery not found' })
+    }
+    res.json({ ok: true })
+  } catch (err) {
+    console.error('DELETE /api/groceries failed:', err)
+    res.status(500).json({ error: err.message })
+  }
+})
+
 // Delete a grocery type
 app.delete('/api/grocery-types/:id', async (req, res) => {
   const id = Number(req.params.id)
