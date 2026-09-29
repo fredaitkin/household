@@ -12,6 +12,8 @@ A one-page React app that displays a tabbed table for tracking household spendin
 - Empty-state message ("No data yet") when a tab has no rows.
 - Responsive table container (horizontal scroll on small screens).
 - Per-tab **+ Add …** links under each table for adding rows.
+- Per-row delete actions for groceries, restaurants, and entertainment.
+- Client-side pagination with 10 rows per page by default. The page size can be changed to 25 or 50 rows.
 - A **⚙ Settings** panel for managing grocery types.
 
 ## Using the app
@@ -36,6 +38,12 @@ Each tab has its own **+ Add …** link directly underneath the table, so you ad
 4. On success the form clears, the table refreshes, and the new row appears. If a request fails, an error banner is shown at the top of the page.
 
 > Tip: grocery types must exist before you can add a grocery, so create them first via **⚙ Settings**.
+
+### Pagination and deleting rows
+
+Tables display 10 rows at a time by default. Use the **Rows per page** selector to display 10, 25, or 50 rows, and use **Previous** and **Next** to move between pages. Pagination is applied in the browser after the current tab's data has been loaded from the API.
+
+Each table row has a **×** action at the right. Clicking it deletes that grocery, restaurant, or entertainment entry and refreshes the current table. Grocery types continue to be deleted from the **⚙ Settings** panel.
 
 ## Getting started
 
@@ -105,7 +113,7 @@ mysql -u <user> -p < db/migrations/000_create_database.sql
 
 ### 2. Create the `h-admin` user
 
-[db/migrations/002_create_admin_user.sql](db/migrations/001_create_admin_user.sql) creates a dedicated MySQL user and grants it access to the `Household` database. **Edit the file first and replace `CHANGE_ME_STRONG_PASSWORD` with a real password.**
+[db/migrations/001_create_admin_user.sql](db/migrations/001_create_admin_user.sql) creates a dedicated MySQL user and grants it access to the `Household` database. **Edit the file first and replace `CHANGE_ME_STRONG_PASSWORD` with a real password.**
 
 ```sql
 CREATE USER IF NOT EXISTS 'h-admin'@'localhost'
@@ -124,7 +132,7 @@ mysql -u root -p < db/migrations/001_create_admin_user.sql
 
 ### 3. Create the `grocery_types` table
 
-[db/migrations/002_create_grocery_types.sql](db/migrations/001_create_grocery_types.sql) creates a lookup table of grocery categories:
+[db/migrations/002_create_grocery_types.sql](db/migrations/002_create_grocery_types.sql) creates a lookup table of grocery categories:
 
 ```sql
 CREATE TABLE IF NOT EXISTS grocery_types (
@@ -249,23 +257,22 @@ mysql -u root -p Household < db/migrations/005_create_entertainment.sql
 
 ## How it works
 
-All tab configuration lives in the `TABS` array at the top of [src/App.jsx](src/App.jsx). Each tab is defined by an `id`, a `label`, its `columns` (header row), and its `rows` (table body data):
+Tab labels and column configuration live in the `TABS` array at the top of [src/App.jsx](src/App.jsx). The component loads grocery types and table data from the Express API, converts the active tab's data into display rows, and applies client-side pagination before rendering the table:
 
 ```jsx
 {
   id: 'groceries',
   label: 'Groceries',
   columns: ['Date', 'Type', 'Cost'],
-  rows: [],
 }
 ```
 
-The active tab is tracked with React state (`useState`). Clicking a tab updates the state, and the table re-renders with that tab's `columns` and `rows`.
+The active tab, current page, and rows-per-page setting are tracked with React state (`useState`). Clicking a tab resets pagination to the first page. Adding or deleting data calls the corresponding API endpoint and reloads the affected table.
 
 ## Customizing
 
-- **Edit columns/rows**: modify the `columns` and `rows` arrays in `TABS`.
+- **Edit columns**: modify the `columns` arrays in `TABS`.
 - **Add a tab**: add a new object to `TABS` with a unique `id`.
-- **Row shape**: each row is an array of strings matching the order and length of `columns`.
+- **Pagination options**: update the page-size `<option>` values in `src/App.jsx` to offer different choices.
 - **Styling**: tweak colors via the CSS custom properties (`--accent`, `--border`, etc.) in [src/App.css](src/App.css).
 
