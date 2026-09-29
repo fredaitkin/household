@@ -141,6 +141,42 @@ app.delete('/api/grocery-types/:id', async (req, res) => {
   }
 })
 
+// Delete a restaurant
+app.delete('/api/restaurants/:id', async (req, res) => {
+  const id = Number(req.params.id)
+  if (!Number.isInteger(id) || id <= 0) {
+    return res.status(400).json({ error: 'valid id is required' })
+  }
+  try {
+    const [result] = await pool.query('DELETE FROM restaurants WHERE id = ?', [id])
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'restaurant not found' })
+    }
+    res.json({ ok: true })
+  } catch (err) {
+    console.error('DELETE /api/restaurants failed:', err)
+    res.status(500).json({ error: err.message })
+  }
+})
+
+// Delete an entertainment
+app.delete('/api/entertainment/:id', async (req, res) => {
+  const id = Number(req.params.id)
+  if (!Number.isInteger(id) || id <= 0) {
+    return res.status(400).json({ error: 'valid id is required' })
+  }
+  try {
+    const [result] = await pool.query('DELETE FROM entertainment WHERE id = ?', [id])
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'entertainment not found' })
+    }
+    res.json({ ok: true })
+  } catch (err) {
+    console.error('DELETE /api/entertainment failed:', err)
+    res.status(500).json({ error: err.message })
+  }
+})
+
 // List restaurants
 app.get('/api/restaurants', async (_req, res) => {
   try {

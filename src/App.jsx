@@ -187,18 +187,26 @@ export default function App() {
   }
 
   // Build the rows to display for the current tab.
+  const columns = [...tab.columns, '']
   const isGroceries = tab.id === 'groceries'
-  const columns = isGroceries ? [...tab.columns, ''] : tab.columns
+  const isRestaurants = tab.id === 'restaurants'
+  const isEntertainment = tab.id === 'entertainment'
   let rows = []
   if (isGroceries) {
     rows = groceries.map((g) => ({
       key: g.id,
       cells: [formatDate(g.date), g.type ?? `#${g.typeId}`, formatCost(g.cost)],
     }))
-  } else if (tab.id === 'restaurants') {
-    rows = restaurants.map((r) => ({ key: r.id, cells: [formatDate(r.date), formatCost(r.cost)] }))
-  } else if (tab.id === 'entertainment') {
-    rows = entertainment.map((x) => ({ key: x.id, cells: [formatDate(x.date), x.type, formatCost(x.cost)] }))
+  } else if (isRestaurants) {
+    rows = restaurants.map((r) => ({
+      key: r.id,
+      cells: [formatDate(r.date), formatCost(r.cost)]
+    }))
+  } else if (isEntertainment) {
+    rows = entertainment.map((x) => ({
+      key: x.id,
+      cells: [formatDate(x.date), x.type ?? `#${x.typeId}`, formatCost(x.cost)]
+    }))
   }
 
   async function deleteGrocery(id) {
@@ -208,6 +216,26 @@ export default function App() {
       await loadGroceries()
     } catch (err) {
       setError(`Could not delete grocery: ${err.message}`)
+    }
+  }
+
+  async function deleteRestaurant(id) {
+    setError('')
+    try {
+      await api(`/api/restaurants/${id}`, { method: 'DELETE' })
+      await loadRestaurants()
+    } catch (err) {
+      setError(`Could not delete restaurant: ${err.message}`)
+    }
+  }
+
+  async function deleteEntertainment(id) {
+    setError('')
+    try {
+      await api(`/api/entertainment/${id}`, { method: 'DELETE' })
+      await loadEntertainment()
+    } catch (err) {
+      setError(`Could not delete entertainment: ${err.message}`)
     }
   }
 
@@ -315,6 +343,32 @@ export default function App() {
                         aria-label="Delete grocery row"
                         title="Delete row"
                         onClick={() => deleteGrocery(row.key)}
+                      >
+                        ×
+                      </button>
+                    </td>
+                  )}
+                  {isRestaurants && (
+                    <td className="row-actions">
+                      <button
+                        type="button"
+                        className="row-delete"
+                        aria-label="Delete restaurant row"
+                        title="Delete row"
+                        onClick={() => deleteRestaurant(row.key)}
+                      >
+                        ×
+                      </button>
+                    </td>
+                  )}
+                  {isEntertainment && (
+                    <td className="row-actions">
+                      <button
+                        type="button"
+                        className="row-delete"
+                        aria-label="Delete entertainment row"
+                        title="Delete row"
+                        onClick={() => deleteEntertainment(row.key)}
                       >
                         ×
                       </button>
