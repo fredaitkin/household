@@ -239,6 +239,22 @@ export default function App() {
     }
   }
 
+  function renderDeleteAction(label, id, deleteHandler) {
+    return (
+      <td className="row-actions">
+        <button
+          type="button"
+          className="row-delete"
+          aria-label={`Delete ${label} row`}
+          title="Delete row"
+          onClick={() => deleteHandler(id)}
+        >
+          ×
+        </button>
+      </td>
+    )
+  }
+
   return (
     <div className="page">
       <div className="topbar">
@@ -335,45 +351,9 @@ export default function App() {
                   {row.cells.map((cell, j) => (
                     <td key={j}>{cell}</td>
                   ))}
-                  {isGroceries && (
-                    <td className="row-actions">
-                      <button
-                        type="button"
-                        className="row-delete"
-                        aria-label="Delete grocery row"
-                        title="Delete row"
-                        onClick={() => deleteGrocery(row.key)}
-                      >
-                        ×
-                      </button>
-                    </td>
-                  )}
-                  {isRestaurants && (
-                    <td className="row-actions">
-                      <button
-                        type="button"
-                        className="row-delete"
-                        aria-label="Delete restaurant row"
-                        title="Delete row"
-                        onClick={() => deleteRestaurant(row.key)}
-                      >
-                        ×
-                      </button>
-                    </td>
-                  )}
-                  {isEntertainment && (
-                    <td className="row-actions">
-                      <button
-                        type="button"
-                        className="row-delete"
-                        aria-label="Delete entertainment row"
-                        title="Delete row"
-                        onClick={() => deleteEntertainment(row.key)}
-                      >
-                        ×
-                      </button>
-                    </td>
-                  )}
+                  {isGroceries && renderDeleteAction('grocery', row.key, deleteGrocery)}
+                  {isRestaurants && renderDeleteAction('restaurant', row.key, deleteRestaurant)}
+                  {isEntertainment && renderDeleteAction('entertainment', row.key, deleteEntertainment)}
                 </tr>
               ))
             )}
