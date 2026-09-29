@@ -13,6 +13,8 @@ export default function App() {
   const [addGroceryOpen, setAddGroceryOpen] = useState(false)
   const [addRestaurantOpen, setAddRestaurantOpen] = useState(false)
   const [addEntertainmentOpen, setAddEntertainmentOpen] = useState(false)
+  const [currentPage, setCurrentPage] = useState(0)
+  const [rowsPerPage, setRowsPerPage] = useState(10)
 
   const [groceryTypes, setGroceryTypes] = useState([])
   const [groceries, setGroceries] = useState([])
@@ -208,6 +210,12 @@ export default function App() {
       cells: [formatDate(x.date), x.type ?? `#${x.typeId}`, formatCost(x.cost)]
     }))
   }
+  const pageCount = Math.max(1, Math.ceil(rows.length / rowsPerPage))
+  const pageIndex = Math.min(currentPage, pageCount - 1)
+  const visibleRows = rows.slice(
+    pageIndex * rowsPerPage,
+    (pageIndex + 1) * rowsPerPage,
+  )
 
   async function deleteGrocery(id) {
     setError('')
@@ -322,7 +330,10 @@ export default function App() {
             role="tab"
             aria-selected={t.id === activeTab}
             className={`tab${t.id === activeTab ? ' active' : ''}`}
-            onClick={() => setActiveTab(t.id)}
+            onClick={() => {
+              setActiveTab(t.id)
+              setCurrentPage(0)
+            }}
           >
             {t.label}
           </button>
@@ -346,7 +357,7 @@ export default function App() {
                 </td>
               </tr>
             ) : (
-              rows.map((row) => (
+              visibleRows.map((row) => (
                 <tr key={row.key}>
                   {row.cells.map((cell, j) => (
                     <td key={j}>{cell}</td>
@@ -360,6 +371,42 @@ export default function App() {
           </tbody>
         </table>
       </div>
+
+      {rows.length > 0 && (
+        <div className="table-controls" aria-label="Table pagination">
+          <label htmlFor="rows-per-page">Rows per page</label>
+          <select
+            id="rows-per-page"
+            value={rowsPerPage}
+            onChange={(e) => {
+              setRowsPerPage(Number(e.target.value))
+              setCurrentPage(0)
+            }}
+          >
+            <option value="10">10</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
+          </select>
+          <span>
+            Showing {pageIndex * rowsPerPage + 1}-{Math.min((pageIndex + 1) * rowsPerPage, rows.length)} of {rows.length}
+          </span>
+          <button
+            type="button"
+            onClick={() => setCurrentPage((page) => page - 1)}
+            disabled={pageIndex === 0}
+          >
+            Previous
+          </button>
+          <span>Page {pageIndex + 1} of {pageCount}</span>
+          <button
+            type="button"
+            onClick={() => setCurrentPage((page) => page + 1)}
+            disabled={pageIndex === pageCount - 1}
+          >
+            Next
+          </button>
+        </div>
+      )}
 
       {activeTab === 'groceries' && (
         <div className="add-grocery">

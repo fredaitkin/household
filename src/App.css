@@ -68,6 +68,39 @@ body {
   overflow-x: auto;
 }
 
+.table-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.table-controls select,
+.table-controls button {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  padding: 6px 10px;
+  border-radius: 6px;
+  font: inherit;
+}
+
+.table-controls button {
+  cursor: pointer;
+}
+
+.table-controls button:disabled {
+  color: var(--muted);
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.table-controls span:first-of-type {
+  margin-left: auto;
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
